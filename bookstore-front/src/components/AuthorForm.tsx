@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Author, CreateAuthorDto } from '@/types/author';
+import { Author } from '@/types/author';
 
 interface AuthorFormProps {
-  onSubmit: (author: CreateAuthorDto) => void;
+  onSubmit: (author: Omit<Author, 'id'>) => void;
   initialData?: Author;
   loading?: boolean;
   errors?: { [key: string]: string };
@@ -19,14 +19,10 @@ export default function AuthorForm({ onSubmit, initialData, loading = false, err
   });
 
   useEffect(() => {
-    if (initialData) {
-      const birthDateString = initialData.birthDate instanceof Date 
-        ? initialData.birthDate.toISOString().split('T')[0]
-        : new Date(initialData.birthDate).toISOString().split('T')[0];
-      
+    if (initialData) {         
       setFormData({
         name: initialData.name,
-        birthDate: birthDateString,
+        birthDate: initialData.birthDate,
         description: initialData.description,
         image: initialData.image
       });
@@ -39,12 +35,8 @@ export default function AuthorForm({ onSubmit, initialData, loading = false, err
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const dataToSubmit = {
-      ...formData,
-      birthDate: new Date(formData.birthDate)
-    };
-    onSubmit(dataToSubmit);
+    e.preventDefault();    
+    onSubmit(formData);
   };
 
   const hasError = (field: string) => errors[field] !== undefined;

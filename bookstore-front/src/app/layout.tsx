@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { FavoritesProvider } from '@/context/FavoritesContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <main>{children}</main>
+        <FavoritesProvider>
+          <main>{children}</main>
+        </FavoritesProvider>
       </body>
     </html>
   );
